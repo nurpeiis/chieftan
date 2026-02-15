@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite3
+*.db
+coverage/
+.nyc_output/
+*.log
+.DS_Store
+*.pem
+*.key
+credentials.json
+token.json
+secrets/
