@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { VERSION } from "./index.js";
+import { VERSION } from "./version.js";
 
 describe("chieftan", () => {
   it("exports version", () => {

@@ -3,7 +3,7 @@ import { ApprovalGate } from "../chief/approval.js";
 import { AnalyticsEngine } from "../chief/analytics.js";
 import { BriefingEngine } from "../chief/briefing.js";
 import { SkillRegistry } from "../skills/registry.js";
-import { VERSION } from "../index.js";
+import { VERSION } from "../version.js";
 
 export interface ApiConfig {
   dbPath: string;
