@@ -346,8 +346,34 @@ async function start(): Promise<void> {
       );
     });
 
-    bot.start();
-    console.log("Telegram bot: connected");
+    // Validate token format before connecting
+    if (!/^\d+:[A-Za-z0-9_-]+$/.test(TELEGRAM_TOKEN)) {
+      console.error(
+        "Telegram bot: invalid token format. Expected format: 123456:ABC-DEF..."
+      );
+      console.error(
+        "  Get a valid token from @BotFather: https://t.me/BotFather"
+      );
+    } else {
+      bot.catch((err) => {
+        console.error("Telegram bot error:", err.message);
+      });
+
+      bot.start({
+        onStart: () => console.log("Telegram bot: connected"),
+      }).catch((err) => {
+        console.error(
+          "Telegram bot: failed to start —",
+          err instanceof Error ? err.message : err
+        );
+        console.error(
+          "  Check your TELEGRAM_BOT_TOKEN in .env"
+        );
+        console.error(
+          "  Dashboard is still running at http://localhost:" + DASHBOARD_PORT
+        );
+      });
+    }
   } else {
     console.log("Telegram bot: skipped (no TELEGRAM_BOT_TOKEN set)");
   }
