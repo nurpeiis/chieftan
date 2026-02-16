@@ -12,18 +12,20 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsx src/index.ts",
+    "build:ui": "cd ui && npm run build",
+    "dev": "npm run build:ui && tsx src/index.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@fastify/static": "^9.0.0",
     "better-sqlite3": "^11.8.1",
-    "grammy": "^1.35.0",
     "croner": "^9.0.0",
     "dotenv": "^16.4.7",
-    "fastify": "^5.2.1"
+    "fastify": "^5.2.1",
+    "grammy": "^1.35.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",

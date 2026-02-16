@@ -1,9 +1,13 @@
 import Fastify, { type FastifyInstance } from "fastify";
+import fastifyStatic from "@fastify/static";
 import { ApprovalGate } from "../chief/approval.js";
 import { AnalyticsEngine } from "../chief/analytics.js";
 import { BriefingEngine } from "../chief/briefing.js";
 import { SkillRegistry } from "../skills/registry.js";
 import { VERSION } from "../version.js";
+import * as path from "node:path";
+import * as fs from "node:fs";
+import { fileURLToPath } from "node:url";
 
 export interface ApiConfig {
   dbPath: string;
@@ -12,6 +16,26 @@ export interface ApiConfig {
 
 export function buildApp(config: ApiConfig): FastifyInstance {
   const app = Fastify({ logger: false });
+
+  // Serve React dashboard static files
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  const uiDistPath = path.resolve(__dirname, "../../ui/dist");
+  if (fs.existsSync(uiDistPath)) {
+    app.register(fastifyStatic, {
+      root: uiDistPath,
+      prefix: "/",
+      wildcard: false,
+    });
+
+    // SPA fallback: serve index.html for non-API routes
+    app.setNotFoundHandler(async (req, reply) => {
+      if (req.url.startsWith("/api/")) {
+        reply.status(404).send({ error: "Not found" });
+      } else {
+        return reply.sendFile("index.html");
+      }
+    });
+  }
 
   const approvalGate = new ApprovalGate(config.dbPath);
   const analytics = new AnalyticsEngine(config.dbPath);
